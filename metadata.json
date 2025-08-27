@@ -1,0 +1,7 @@
+{
+  "name": "University AI Chatbot",
+  "description": "An AI-powered chatbot for the University of Technology. Upload PDF documents like syllabuses or handbooks, and ask questions to get intelligent, context-aware answers based on the provided material.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
