@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { ChatMessage, MessageAuthor, UploadedFile } from './types';
-import { askWithPdf } from './services/geminiService';
+import { ChatMessage, MessageAuthor } from './types';
+import { askWithHandbook } from './services/geminiService';  // renamed service
 import ChatWindow from './components/ChatWindow';
 import MessageInput from './components/MessageInput';
 import Header from './components/Header';
@@ -10,24 +10,12 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [inputValue, setInputValue] = useState('');
 
   const handleSendMessage = useCallback(async () => {
     const prompt = inputValue;
     if (!prompt.trim() || isLoading) return;
 
-    if (!uploadedFile) {
-        setError("Please upload a PDF document before asking a question.");
-        const errorMessage: ChatMessage = {
-            author: MessageAuthor.AI,
-            text: "Please upload a PDF document before asking a question.",
-            isError: true,
-        };
-        setMessages(prev => [...prev, errorMessage]);
-        return;
-    }
-    
     setError(null);
     const userMessage: ChatMessage = { author: MessageAuthor.USER, text: prompt };
     setMessages(prev => [...prev, userMessage]);
@@ -35,7 +23,7 @@ const App: React.FC = () => {
     setInputValue('');
 
     try {
-      const aiResponseText = await askWithPdf(prompt, uploadedFile);
+      const aiResponseText = await askWithHandbook(prompt); // <-- no file
       const aiMessage: ChatMessage = { author: MessageAuthor.AI, text: aiResponseText };
       setMessages(prev => [...prev, aiMessage]);
     } catch (err) {
@@ -50,20 +38,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, uploadedFile, inputValue]);
-
-  const handleFileChange = (file: UploadedFile | null) => {
-    setUploadedFile(file);
-    setMessages([]);
-    setError(null);
-    if (file) {
-        const welcomeMessage: ChatMessage = {
-            author: MessageAuthor.AI,
-            text: `Thank you for uploading "${file.name}". What would you like to know about this document?`
-        };
-        setMessages([welcomeMessage]);
-    }
-  };
+  }, [isLoading, inputValue]);
 
   const handleSampleQuestionClick = (question: string) => {
     setInputValue(question);
@@ -81,9 +56,7 @@ const App: React.FC = () => {
         <div className="mt-4 md:mt-6 w-full max-w-4xl mx-auto">
           <MessageInput
             onSendMessage={handleSendMessage}
-            onFileChange={handleFileChange}
             isLoading={isLoading}
-            uploadedFileName={uploadedFile?.name}
             inputValue={inputValue}
             onInputChange={setInputValue}
           />
