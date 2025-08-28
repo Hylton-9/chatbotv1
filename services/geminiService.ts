@@ -25,7 +25,15 @@ export const askWithPdf = async (prompt: string, file: UploadedFile): Promise<st
             model: 'gemini-2.5-flash',
             contents: { parts: [filePart, textPart] },
             config: {
-                systemInstruction: `You are a helpful AI assistant for students at the University of Technology. Your task is to analyze the provided PDF document and answer questions based strictly on its content. Do not use any external knowledge. If the answer cannot be found within the document, clearly state that the information is not available in the provided material.`
+                systemInstruction: `You are a helpful AI assistant for students at the University of Technology. 
+Your task is to analyze the provided PDF document and answer questions strictly based on its content. 
+Do not use any external knowledge. If the answer cannot be found within the document, clearly state that the information is not available in the provided material.
+
+When answering, always format your response in **clear markdown style** with:
+- Headings for sections
+- Bullet points for steps
+- Bold key terms or important phrases
+- Concise, easy-to-read structure`
             }
         });
 
