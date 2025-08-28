@@ -18,16 +18,16 @@ const App: React.FC = () => {
     if (!prompt.trim() || isLoading) return;
 
     if (!uploadedFile) {
-        setError("Please upload a PDF document before asking a question.");
-        const errorMessage: ChatMessage = {
-            author: MessageAuthor.AI,
-            text: "Please upload a PDF document before asking a question.",
-            isError: true,
-        };
-        setMessages(prev => [...prev, errorMessage]);
-        return;
+      setError("Please upload a PDF document before asking a question.");
+      const errorMessage: ChatMessage = {
+        author: MessageAuthor.AI,
+        text: "Please upload a PDF document before asking a question.",
+        isError: true,
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      return;
     }
-    
+
     setError(null);
     const userMessage: ChatMessage = { author: MessageAuthor.USER, text: prompt };
     setMessages(prev => [...prev, userMessage]);
@@ -41,10 +41,10 @@ const App: React.FC = () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
       setError(errorMessage);
-      const aiErrorMessage: ChatMessage = { 
-          author: MessageAuthor.AI, 
-          text: `Sorry, something went wrong. ${errorMessage}`,
-          isError: true,
+      const aiErrorMessage: ChatMessage = {
+        author: MessageAuthor.AI,
+        text: `Sorry, something went wrong. ${errorMessage}`,
+        isError: true,
       };
       setMessages(prev => [...prev, aiErrorMessage]);
     } finally {
@@ -57,11 +57,11 @@ const App: React.FC = () => {
     setMessages([]);
     setError(null);
     if (file) {
-        const welcomeMessage: ChatMessage = {
-            author: MessageAuthor.AI,
-            text: `Thank you for uploading "${file.name}". What would you like to know about this document?`
-        };
-        setMessages([welcomeMessage]);
+      const welcomeMessage: ChatMessage = {
+        author: MessageAuthor.AI,
+        text: `Thank you for uploading "${file.name}". What would you like to know about this document?`
+      };
+      setMessages([welcomeMessage]);
     }
   };
 
@@ -76,7 +76,9 @@ const App: React.FC = () => {
       <Header />
       <main className="flex-1 flex flex-col p-4 md:p-6 lg:p-8 overflow-hidden">
         <div className="flex-1 w-full max-w-4xl mx-auto overflow-y-auto pr-4">
-            {hasChatStarted ? <ChatWindow messages={messages} isLoading={isLoading} /> : <WelcomeScreen onSampleQuestionClick={handleSampleQuestionClick} />}
+          {hasChatStarted
+            ? <ChatWindow messages={messages} isLoading={isLoading} />
+            : <WelcomeScreen onSampleQuestionClick={handleSampleQuestionClick} />}
         </div>
         <div className="mt-4 md:mt-6 w-full max-w-4xl mx-auto">
           <MessageInput
