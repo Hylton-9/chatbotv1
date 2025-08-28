@@ -22,7 +22,7 @@ export const askWithPdf = async (prompt: string, file: UploadedFile): Promise<st
         };
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-pro',
+            model: 'gemini-2.5-flash',
             contents: { parts: [filePart, textPart] },
             config: {
                 systemInstruction: `You are a helpful AI assistant for students at the University of Technology. Your task is to analyze the provided PDF document and answer questions based strictly on its content. Do not use any external knowledge. If the answer cannot be found within the document, clearly state that the information is not available in the provided material.`
